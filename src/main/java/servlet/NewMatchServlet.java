@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
-    MatchService matchService = new MatchService();
+    MatchService matchService = MatchService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("new-match.html").forward(req, resp);
