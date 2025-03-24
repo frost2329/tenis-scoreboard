@@ -1,0 +1,127 @@
+/* Общие стили для страницы */
+body {
+    margin:0;
+}
+
+.header {
+    height: 50px;
+    background-color: #4CAF50;
+    padding: 0 20px; /* Отступы слева и справа */
+    display: flex;
+    align-items: center; /* Центрирование по вертикали */
+}
+
+.header a {
+    text-decoration: none;
+    color: white;
+    font-size: 24px ;
+}
+.content {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.scoreboard {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 800px;
+}
+
+.container-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #e0e0e0;
+    border-radius: 7.5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.label-name {
+    flex: 0 0 25%;
+    text-align: left;
+    font-size: 24px;
+}
+
+.label-scores {
+    flex: 0 0 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 24px;
+}
+
+.label-button {
+    flex: 0 0 25%;
+    text-align: right;
+}
+
+.player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 7.5px;
+    margin-bottom: 15px;
+}
+
+.player-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+    flex: 0 0 25%;
+    text-align: left;
+}
+
+.player-score {
+    display: flex;
+    justify-content: space-around;
+    flex: 0 0 50%;
+}
+
+.score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #555555;
+    background-color: #ffffff;
+    padding: 12px 18px;
+    margin: 0 7.5px;
+    border-radius: 7.5px;
+    text-align: center;
+    min-width: 60px;
+}
+
+.button-score {
+    flex: 0 0 25%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.button-score button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 7.5px;
+    cursor: pointer;
+    font-size: 21px;
+    transition: background-color 0.3s ease;
+}
+
+.button-score button:hover {
+    background-color: #45a049;
+}
+
+.score.active {
+    background-color: #4CAF50;
+    color: #ffffff;
+}

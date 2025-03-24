@@ -1,11 +1,58 @@
-
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title> match-score </title>
     <script src="/js/match-score.js"></script>
+    <link rel="stylesheet" href="css/match-score.css">
 </head>
+
 <body>
-    match-score
+
+<header class="header">
+    <a href="/">Home</a>
+</header>
+
+<div class="content">
+    <div class="scoreboard">
+        <!-- Заголовки -->
+        <div class="container-label">
+            <div class="label-name">Player</div>
+            <div class="label-scores">
+                <div>Sets</div>
+                <div>Games</div>
+                <div>Points</div>
+            </div>
+            <div class="label-button">
+            </div>
+        </div>
+
+        <!-- Игрок 1 -->
+        <div class="player">
+            <div class="player-name" id="player-name-1">Player 1</div>
+            <div class="player-score" id="player-score-1">
+                <div class="score">0</div>
+                <div class="score">0</div>
+                <div class="score">0</div>
+            </div>
+            <div class="button-score">
+                <button type="button">Score</button>
+            </div>
+        </div>
+
+        <!-- Игрок 2 -->
+        <div class="player">
+            <div class="player-name" id="player-name-2">Player 2</div>
+            <div class="player-score" id="player-score-2">
+                <div class="score">0</div>
+                <div class="score">0</div>
+                <div class="score">0</div>
+            </div>
+            <div class="button-score">
+                <button type="button">Score</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+
 </html>

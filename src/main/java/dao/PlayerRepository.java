@@ -1,18 +1,18 @@
 package dao;
 
-import entity.Player;
+import entity.PlayerEntity;
 
 public class PlayerRepository {
-    public Player getByName(String name) {
-        return Player.builder()
-                .id(1L)
+    public PlayerEntity getByName(String name) {
+        return PlayerEntity.builder()
+                .id(1)
                 .name(name)
                 .build();
     }
 
-    public Player create(String name) {
-        return Player.builder()
-                .id(1L)
+    public PlayerEntity create(String name) {
+        return PlayerEntity.builder()
+                .id(1)
                 .name(name)
                 .build();
     }

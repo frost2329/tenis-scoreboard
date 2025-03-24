@@ -20,9 +20,9 @@ public class NewMatchServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String player1 = req.getParameter("player1");
-        String player2 = req.getParameter("player2");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String player1 = req.getParameter("playerName1");
+        String player2 = req.getParameter("playerName2");
         UUID matchID = matchService.createMatch(player1, player2);
         resp.sendRedirect("/match-table?uuid=" + matchID);
     }
