@@ -25,9 +25,8 @@ function loadScoreData() {
             return response.json(); // Парсим JSON-ответ
         })
         .then(data => {
-            console.log('Match data:', data);
             matchData = data;
-            updateScoreboard(data);
+            updateScoreboard();
         })
         .catch(error => {
             console.error('Ошибка:', error);
@@ -35,10 +34,10 @@ function loadScoreData() {
 }
 
 function sendScorePoint(event) {
-    const playerName = event.target.closest('.player-name');
+    const buttonId = event.target.id;
     const data = {
         uuid:  matchData.uuid,
-        playerId: 1
+        playerId: buttonId === 'score-button-1' ? matchData.firstPlayerId : matchData.secondPlayerId
     };
 
     fetch(API_URL, {
@@ -53,31 +52,48 @@ function sendScorePoint(event) {
             return response.json(); // Парсим JSON-ответ
         })
         .then(data => {
-            console.log('Успешно:', data);
             matchData = data;
+            updateScoreboard();
+            if(matchData.finished) {
+                disableButtons();
+                showWinner();
+            }
         })
         .catch(error => {
             console.error('Ошибка:', error);
         });
 }
 
-function updateScoreboard(data) {
+function updateScoreboard() {
     // Обновляем имя первого игрока
-    document.querySelector('#player-name-1').textContent = data.firstPlayerName;
+    document.querySelector('#player-name-1').textContent = matchData.firstPlayerName;
 
     // Обновляем счет первого игрока
     const firstPlayerScores = document.querySelectorAll('#player-score-1:nth-child(2) .score');
-    firstPlayerScores[0].textContent = data.firstPlayerScore.sets; // Sets
-    firstPlayerScores[1].textContent = data.firstPlayerScore.games; // Games
-    firstPlayerScores[2].textContent = data.firstPlayerScore.points; // Points
+    firstPlayerScores[0].textContent = matchData.firstPlayerScore.sets; // Sets
+    firstPlayerScores[1].textContent = matchData.firstPlayerScore.games; // Games
+    firstPlayerScores[2].textContent = matchData.firstPlayerScore.points; // Points
 
     // Обновляем имя второго игрока
-    document.querySelector('#player-name-2').textContent = data.secondPlayerName;
+    document.querySelector('#player-name-2').textContent = matchData.secondPlayerName;
 
     // Обновляем счет второго игрока
     const secondPlayerScores = document.querySelectorAll('#player-score-2:nth-child(2) .score');
-    secondPlayerScores[0].textContent = data.secondPlayerScore.sets; // Sets
-    secondPlayerScores[1].textContent = data.secondPlayerScore.games; // Games
-    secondPlayerScores[2].textContent = data.secondPlayerScore.points; // Points
+    secondPlayerScores[0].textContent = matchData.secondPlayerScore.sets; // Sets
+    secondPlayerScores[1].textContent = matchData.secondPlayerScore.games; // Games
+    secondPlayerScores[2].textContent = matchData.secondPlayerScore.points; // Points
+}
+function disableButtons() {
+    let buttonScore1 = document.querySelector('#score-button-1');
+    let buttonScore2 = document.querySelector('#score-button-2');
+    buttonScore1.disabled = true;
+    buttonScore2.disabled = true;
+}
+
+function showWinner() {
+    let scoreboard = document.querySelector('.scoreboard');
+    let winnerElem = document.createElement("div");
+    winnerElem.append("Игра завершена")
+    scoreboard.append(winnerElem);
 }
 

@@ -1,4 +1,4 @@
-package util;
+package by.frostetsky.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
