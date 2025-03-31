@@ -19,8 +19,6 @@ public class OngoingMatchService {
     private OngoingMatchService() {}
 
     private final PlayerService playerService = PlayerService.getInstance();
-    private final MatchScoreCalculatorService matchScoreCalculatorService = MatchScoreCalculatorService.getInstance();
-    private final FinishedMatchService finishedMatchService = FinishedMatchService.getInstance();
     private final MatchMapper matchMapper = MatchMapper.getInstance();
 
     private final Map<UUID, CurrentMatchModel> matches = new ConcurrentHashMap<>();
@@ -34,25 +32,19 @@ public class OngoingMatchService {
     }
 
     public MatchDto getCurrentMatch(UUID uuid) {
-        CurrentMatchModel match = getMatch(uuid);
+        CurrentMatchModel match = getMatchModel(uuid);
         return matchMapper.toDto(match);
     }
 
-    public MatchDto addPointToPlayer(UUID uuid, Integer playerId) {
-        CurrentMatchModel match = getMatch(uuid);
-        matchScoreCalculatorService.addPointToPlayer(match, playerId);
-        if(match.isFinished()) {
-            finishedMatchService.saveMatch(match);
-            matches.remove(match.getUuid());
-        }
-        return matchMapper.toDto(match);
-    }
-
-    private CurrentMatchModel getMatch(UUID uuid) {
+    public CurrentMatchModel getMatchModel(UUID uuid) {
         CurrentMatchModel match = matches.get(uuid);
         if (match == null) {
             throw new MatchNotFoundException("Match with uuid " + uuid + " not found");
         }
         return match;
+    }
+
+    public void removeMatch(UUID uuid) {
+        matches.remove(uuid);
     }
 }

@@ -9,6 +9,7 @@ public class FinishedMatchMapper {
     public static FinishedMatchMapper getInstance() {
         return INSTANCE;
     }
+
     public FinishedMatchDto toDto(FinishedMatch finishedMatch) {
         return new FinishedMatchDto(finishedMatch.getFirstPlayer().getName(),
                 finishedMatch.getSecondPlayer().getName(),

@@ -45,7 +45,9 @@ function sendScorePoint(event) {
     const buttonId = event.target.id;
     const data = {
         uuid:  matchData.uuid,
-        playerId: buttonId === 'score-button-1' ? matchData.firstPlayer.playerId : matchData.secondPlayer.playerId
+        playerId: buttonId === 'score-button-1'
+            ? matchData.firstPlayer.playerId
+            : matchData.secondPlayer.playerId
     };
 
     fetch(API_URL, {
@@ -57,7 +59,7 @@ function sendScorePoint(event) {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json(); // Парсим JSON-ответ
+            return response.json();
         })
         .then(data => {
             matchData = data;
@@ -99,7 +101,7 @@ function disableButtons() {
 function showWinner() {
     const winnerBlock = document.querySelector('.winner-block');
     winnerBlock.style.display = 'flex';
-    const winnerName = matchData.firstPlayerScore.sets === 2 ? matchData.firstPlayerName : matchData.secondPlayerName;
+    const winnerName = matchData.firstPlayer.sets === 2 ? matchData.firstPlayer.playerName : matchData.secondPlayer.playerName;
     winnerBlock.textContent = "Игра завершена. " + winnerName + " победил!";
 }
 

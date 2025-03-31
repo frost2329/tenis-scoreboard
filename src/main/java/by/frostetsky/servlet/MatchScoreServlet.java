@@ -2,6 +2,7 @@ package by.frostetsky.servlet;
 
 import by.frostetsky.dto.MatchDto;
 import by.frostetsky.exception.MatchNotFoundException;
+import by.frostetsky.service.MatchScoreCalculatorService;
 import by.frostetsky.util.ResponseUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,8 +19,9 @@ import java.util.UUID;
 
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
-    Gson gson = GsonSingleton.getInstance();
-    OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
+    private final Gson gson = GsonSingleton.getInstance();
+    private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
+    private final MatchScoreCalculatorService matchScoreCalculatorService = MatchScoreCalculatorService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -42,7 +44,7 @@ public class MatchScoreServlet extends HttpServlet {
         String requestBody =  RequestUtil.readRequestBody(req);
         MatchScoreRequest matchScoreRequest = gson.fromJson(requestBody, MatchScoreRequest.class);
         try {
-            MatchDto matchDto = ongoingMatchService.addPointToPlayer(matchScoreRequest.uuid(), matchScoreRequest.playerId());
+            MatchDto matchDto = matchScoreCalculatorService.updateScore(matchScoreRequest.uuid(), matchScoreRequest.playerId());
             ResponseUtil.sendResponse(resp, HttpServletResponse.SC_OK, matchDto);
         } catch (Exception e) {
             ResponseUtil.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());

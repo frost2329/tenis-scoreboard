@@ -2,8 +2,10 @@ package by.frostetsky.servlet;
 
 import by.frostetsky.dto.FinishedMatchDto;
 import by.frostetsky.dto.FinishedMatchesResponse;
+import by.frostetsky.dto.MatchDto;
 import by.frostetsky.service.FinishedMatchService;
 import by.frostetsky.util.GsonSingleton;
+import by.frostetsky.util.ResponseUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,9 +24,12 @@ public class FinishedMatchesDataServlet extends HttpServlet {
         Integer page = Integer.valueOf(req.getParameter("page"));
         Integer size = Integer.valueOf(req.getParameter("size"));
         String filter = req.getParameter("filter");
-        FinishedMatchesResponse matches = finishedMatchService.findAllMatches(page, size, filter);
-        resp.setContentType("application/json");
-        gson.toJson(matches, resp.getWriter());
+        try {
+            FinishedMatchesResponse matches = finishedMatchService.findAllMatches(page, size, filter);
+            ResponseUtil.sendResponse(resp, HttpServletResponse.SC_OK, matches);
+        } catch (Exception e) {
+            ResponseUtil.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        }
     }
 
 }

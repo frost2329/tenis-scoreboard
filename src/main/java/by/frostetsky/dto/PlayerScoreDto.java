@@ -5,6 +5,6 @@ public record PlayerScoreDto(
         String playerName,
         Integer sets,
         Integer games,
-        Integer points
+        String points
 ) {
 }

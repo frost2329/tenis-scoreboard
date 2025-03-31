@@ -6,8 +6,10 @@ import by.frostetsky.model.CurrentMatchModel;
 
 public class MatchMapper {
     private static final MatchMapper INSTANCE = new MatchMapper();
+
     private MatchMapper() {
     }
+
     public static MatchMapper getInstance() {
         return INSTANCE;
     }
@@ -20,13 +22,17 @@ public class MatchMapper {
                         matchModel.getFirstPlayerName(),
                         matchModel.getFirstPlayerScore().getSets(),
                         matchModel.getFirstPlayerScore().getGames(),
-                        matchModel.getFirstPlayerScore().getPoints()),
+                        !matchModel.isTieBreak()
+                                ? matchModel.getFirstPlayerScore().getPoints().getValue()
+                                : String.valueOf(matchModel.getFirstPlayerScore().getTieBreakPoints())),
                 new PlayerScoreDto(
                         matchModel.getSecondPlayerId(),
                         matchModel.getSecondPlayerName(),
                         matchModel.getSecondPlayerScore().getSets(),
                         matchModel.getSecondPlayerScore().getGames(),
-                        matchModel.getSecondPlayerScore().getPoints()),
+                        !matchModel.isTieBreak()
+                                ? matchModel.getSecondPlayerScore().getPoints().getValue()
+                                : String.valueOf(matchModel.getSecondPlayerScore().getTieBreakPoints())),
                 matchModel.isTieBreak(),
                 matchModel.isFinished()
         );
