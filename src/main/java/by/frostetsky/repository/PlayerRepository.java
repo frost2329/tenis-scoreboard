@@ -1,4 +1,4 @@
-package by.frostetsky.dao;
+package by.frostetsky.repository;
 
 import by.frostetsky.entity.Player;
 import lombok.RequiredArgsConstructor;

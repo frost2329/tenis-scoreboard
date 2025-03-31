@@ -1,20 +1,40 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>
-        finished matches
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Matches</title>
+    <link rel="stylesheet" href="css/matches.css">
+    <script src="/js/matches.js" defer></script>
 </head>
-    <header>
-        <div>
-            <a href="/">Home</a>
-        </div>
-    </header>
-    <hr/>
-    <body>
-    <div>
-        Matches
+<body>
+<header class="header">
+    <nav class="nav-container">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/matches" class="nav-link">Matches</a>
+    </nav>
+</header>
+<div class="container">
+    <h1>Tennis Matches</h1>
+    <div id="loading" class="loading">Loading matches...</div>
+    <div id="error" class="error" style="display: none;"></div>
+
+    <table id="matches-table" style="display: none;">
+        <thead>
+        <tr>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Winner</th>
+        </tr>
+        </thead>
+        <tbody id="matches-body">
+        </tbody>
+    </table>
+
+    <div class="pagination-container">
+
     </div>
+</div>
+
 </body>
 </html>

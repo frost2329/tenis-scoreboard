@@ -1,28 +1,47 @@
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    <meta charset="utf-8" />
-    <title>
-       new-match
-    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Match | Tennis Scoreboard</title>
+    <link rel="stylesheet" href="css/new-match.css">
 </head>
 <body>
-    <header>
-        <div>
-            <a href="/">Home</a>
-        </div>
-    </header>
-    <hr/>
-    <div>
-        New Match
-        <form action="/new-match" method="post">
-            <label for="player1"></label>
-            <input type="text" id="player1" name="playerName1" placeholder="Введите имя 1 игрока" required>
-            <br>
-            <label for="player2"></label>
-            <input type="text" id="player2" name="playerName2" placeholder="Введите имя 2 игрока" required>
-            <br>
-            <button type="submit">Старт!</button>
+<header class="header">
+    <nav class="nav-container">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/matches" class="nav-link">Matches</a>
+    </nav>
+</header>
+
+<main class="main-container">
+    <div class="form-container">
+        <h1 class="form-title">New Match</h1>
+
+        <form class="match-form" action="/new-match" method="post">
+            <div class="form-group">
+                <label class="form-label" for="player1">Player 1</label>
+                <input class="form-input"
+                       type="text"
+                       id="player1"
+                       name="playerName1"
+                       placeholder="Enter first player name"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="player2">Player 2</label>
+                <input class="form-input"
+                       type="text"
+                       id="player2"
+                       name="playerName2"
+                       placeholder="Enter second player name"
+                       required>
+            </div>
+
+            <button class="submit-button" type="submit">Start Match!</button>
         </form>
     </div>
+</main>
 </body>
 </html>

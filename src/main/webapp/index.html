@@ -1,25 +1,31 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>
-        index
-    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Scoreboard</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <header>
-        <div>
-            <a href="/">Home</a>
+
+<header class="header">
+    <nav class="nav-container">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/matches" class="nav-link">Matches</a>
+    </nav>
+</header>
+
+<main class="main-content">
+    <div class="content">
+        <h1>Tennis Scoreboard</h1>
+        <div class="content-elem">
+            <a href="/new-match" class="btn">New Match</a>
         </div>
-        <div>
-            <a href="/matches">Finished Matches</a>
+        <div class="content-elem">
+            <a href="/matches" class="btn">Matches</a>
         </div>
-    </header>
-    <hr/>
-    <div>
-        <a href="/new-match">New Match</a>
     </div>
-    <div>
-        <a href="/matches">Matches</a>
-    </div>
+</main>
+
 </body>
 </html>

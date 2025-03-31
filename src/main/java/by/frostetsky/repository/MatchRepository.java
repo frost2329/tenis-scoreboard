@@ -1,12 +1,12 @@
-package by.frostetsky.dao;
+package by.frostetsky.repository;
 
 import by.frostetsky.entity.FinishedMatch;
-import by.frostetsky.entity.Player;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -41,5 +41,23 @@ public class MatchRepository implements Repository<Integer, FinishedMatch> {
     public void delete(Integer id) {
         session.remove(session.find(FinishedMatch.class, id));
         session.flush();
+    }
+
+    public List<FinishedMatch> findAll(Integer page, Integer size, String playerNameFilter) {
+        String hql = """
+                SELECT m 
+                FROM FinishedMatch m 
+                WHERE lower(m.firstPlayer.name) LIKE :fragment OR lower(m.secondPlayer.name) LIKE :fragment 
+                """;
+        return session.createQuery(hql, FinishedMatch.class)
+                .setParameter("fragment", playerNameFilter != null ? playerNameFilter : "" + "%".toLowerCase(Locale.ROOT))
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
+    }
+
+    public Long getTotalCount() {
+        String hql = "select count(m) from FinishedMatch m";
+        return session.createQuery(hql, Long.class).uniqueResult();
     }
 }

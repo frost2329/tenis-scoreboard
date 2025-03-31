@@ -1,0 +1,167 @@
+/* Общие стили для страницы */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.header {
+    height: 50px;
+    background-color: #4CAF50;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-container {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    transition: opacity 0.3s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+/* Контейнер */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Заголовок */
+h1 {
+    color: #333333;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+/* Таблица */
+#matches-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#matches-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 20px;
+}
+
+#matches-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 18px;
+}
+
+#matches-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Состояния загрузки и ошибки */
+.loading {
+    text-align: center;
+    padding: 30px;
+    font-size: 20px;
+    color: #555555;
+}
+
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #e74c3c;
+    font-size: 18px;
+    background-color: #ffebee;
+    border-radius: 7.5px;
+    margin: 20px 0;
+}
+
+/* Стили пагинации */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 30px 0;
+    padding: 10px 0;
+}
+
+.pag-button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.pag-button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.pag-button.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+    font-weight: bold;
+}
+
+.pag-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pag-button:first-child,
+.pag-button:last-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+    .pagination-container {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .pag-button {
+        padding: 6px 12px;
+        min-width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .pag-button:first-child,
+    .pag-button:last-child {
+        font-size: 16px;
+    }
+}
+
+.pagination-ellipsis {
+    display: inline-block;
+    padding: 8px 4px;
+    color: #666;
+    user-select: none;
+}

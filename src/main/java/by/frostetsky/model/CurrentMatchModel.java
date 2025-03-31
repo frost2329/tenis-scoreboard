@@ -1,5 +1,6 @@
 package by.frostetsky.model;
 
+import by.frostetsky.dto.PlayerDto;
 import by.frostetsky.exception.GameFinishedException;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 public class CurrentMatchModel {
     private UUID uuid;
 
+
     private int firstPlayerId;
     private String firstPlayerName;
     private PlayerScore firstPlayerScore;
@@ -18,19 +20,19 @@ public class CurrentMatchModel {
     private String secondPlayerName;
     private PlayerScore secondPlayerScore;
 
-    private boolean finished = false;
-    private boolean tieBreak = false;
+    private boolean isFinished = false;
+    private boolean isTieBreak = false;
 
     private int winner;
 
-    public CurrentMatchModel(PlayerModel firstPlayer, PlayerModel secondPlayer) {
+    public CurrentMatchModel(PlayerDto firstPlayer, PlayerDto secondPlayer) {
         this.uuid = UUID.randomUUID();
-        this.firstPlayerId = firstPlayer.getId();
-        this.firstPlayerName = firstPlayer.getName();
+        this.firstPlayerId = firstPlayer.id();
+        this.firstPlayerName = firstPlayer.name();
         this.firstPlayerScore = new PlayerScore();
 
-        this.secondPlayerId = secondPlayer.getId();
-        this.secondPlayerName = secondPlayer.getName();
+        this.secondPlayerId = secondPlayer.id();
+        this.secondPlayerName = secondPlayer.name();
         this.secondPlayerScore = new PlayerScore();
     }
 
@@ -40,6 +42,11 @@ public class CurrentMatchModel {
         }
         int points = score.getPoints();
         int opponentPoints = opponentScore.getPoints();
+
+        if (this.isTieBreak) {
+            addPointForTieBreak(score, opponentScore);
+            return;
+        }
         switch (points) {
             case 0 -> {
                 score.setPoints(15);
@@ -69,6 +76,22 @@ public class CurrentMatchModel {
         }
     }
 
+    private void addPointForTieBreak(PlayerScore score, PlayerScore opponentScore) {
+        int points = score.getPoints();
+        int opponentPoints = opponentScore.getPoints();
+        if (points < 6) {
+            score.setPoints(points + 1);
+        } else {
+            if (points - opponentPoints >= 1) {
+                score.setPoints(0);
+                opponentScore.setPoints(0);
+                addGame(score, opponentScore);
+            } else {
+                score.setPoints(points+1);
+            }
+        }
+    }
+
     private void addGame(PlayerScore score, PlayerScore opponentScore) {
         int games = score.getGames();
         int opponentGames = opponentScore.getGames();
@@ -83,12 +106,12 @@ public class CurrentMatchModel {
             } else if (opponentGames == 5) {
                 score.setGames(games+1);
             } else if (opponentGames == 6) {
-                this.tieBreak = true;
+                this.isTieBreak = true;
                 score.setGames(games+1);
             }
         }
         else if (games == 6) {
-            this.tieBreak = false;
+            this.isTieBreak = false;
             score.setGames(0);
             opponentScore.setGames(0);
             addSet(score);
@@ -99,7 +122,7 @@ public class CurrentMatchModel {
         score.setSets(score.getSets()+1);
         if(score.getSets() == 2) {
             this.winner = this.getFirstPlayerScore().getSets() == 2 ? this.firstPlayerId : this.secondPlayerId;
-            this.finished = true;
+            this.isFinished = true;
         }
     }
 }

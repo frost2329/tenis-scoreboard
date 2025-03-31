@@ -1,8 +1,9 @@
 package by.frostetsky.service;
 
-import by.frostetsky.dao.PlayerRepository;
-import by.frostetsky.entity.Player;
+import by.frostetsky.dto.PlayerDto;
 import by.frostetsky.mapper.PlayerMapper;
+import by.frostetsky.repository.PlayerRepository;
+import by.frostetsky.entity.Player;
 import by.frostetsky.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,15 +16,16 @@ public class PlayerService {
     public static PlayerService getInstance() {return INSTANCE;}
 
     private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    private final PlayerMapper playerMapper = PlayerMapper.getInstance();
 
-    public Player getPlayer(String name) {
+    public PlayerDto getPlayer(String name) {
         Session session = sessionFactory.getCurrentSession();
         session.getTransaction().begin();
         PlayerRepository playerRepository = new PlayerRepository(session);
         Optional<Player> maybePlayer = playerRepository.getByName(name);
         Player player = maybePlayer.orElse(createPlayer(name, playerRepository));
         session.getTransaction().commit();
-        return player;
+        return playerMapper.toDto(player);
     }
 
     public Player createPlayer(String name, PlayerRepository playerRepository) {

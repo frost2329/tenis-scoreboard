@@ -1,14 +1,16 @@
 package by.frostetsky.mapper;
 
 import by.frostetsky.entity.Player;
-import by.frostetsky.model.PlayerModel;
+import by.frostetsky.dto.PlayerDto;
 
 public class PlayerMapper {
     private static final PlayerMapper INSTANCE = new PlayerMapper();
-    public static PlayerMapper getInstance() {return INSTANCE;}
+    public static PlayerMapper getInstance() {
+        return INSTANCE;
+    }
     private  PlayerMapper() {}
 
-    public PlayerModel toPlayer(Player player) {
-        return new PlayerModel(player.getId(), player.getName());
+    public PlayerDto toDto(Player player) {
+        return new PlayerDto(player.getId(), player.getName());
     }
 }

@@ -20,15 +20,23 @@ function loadScoreData() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json()
+                    .then(errorData => {
+                        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                    });
             }
-            return response.json(); // Парсим JSON-ответ
+            return response.json();
         })
         .then(data => {
             matchData = data;
             updateScoreboard();
+            if(matchData.isFinished) {
+                disableButtons();
+                showWinner();
+            }
         })
         .catch(error => {
+            showError(error);
             console.error('Ошибка:', error);
         });
 }
@@ -37,7 +45,7 @@ function sendScorePoint(event) {
     const buttonId = event.target.id;
     const data = {
         uuid:  matchData.uuid,
-        playerId: buttonId === 'score-button-1' ? matchData.firstPlayerId : matchData.secondPlayerId
+        playerId: buttonId === 'score-button-1' ? matchData.firstPlayer.playerId : matchData.secondPlayer.playerId
     };
 
     fetch(API_URL, {
@@ -54,7 +62,7 @@ function sendScorePoint(event) {
         .then(data => {
             matchData = data;
             updateScoreboard();
-            if(matchData.finished) {
+            if(matchData.isFinished) {
                 disableButtons();
                 showWinner();
             }
@@ -65,24 +73,22 @@ function sendScorePoint(event) {
 }
 
 function updateScoreboard() {
-    // Обновляем имя первого игрока
-    document.querySelector('#player-name-1').textContent = matchData.firstPlayerName;
-
-    // Обновляем счет первого игрока
-    const firstPlayerScores = document.querySelectorAll('#player-score-1:nth-child(2) .score');
-    firstPlayerScores[0].textContent = matchData.firstPlayerScore.sets; // Sets
-    firstPlayerScores[1].textContent = matchData.firstPlayerScore.games; // Games
-    firstPlayerScores[2].textContent = matchData.firstPlayerScore.points; // Points
-
-    // Обновляем имя второго игрока
-    document.querySelector('#player-name-2').textContent = matchData.secondPlayerName;
-
-    // Обновляем счет второго игрока
-    const secondPlayerScores = document.querySelectorAll('#player-score-2:nth-child(2) .score');
-    secondPlayerScores[0].textContent = matchData.secondPlayerScore.sets; // Sets
-    secondPlayerScores[1].textContent = matchData.secondPlayerScore.games; // Games
-    secondPlayerScores[2].textContent = matchData.secondPlayerScore.points; // Points
+    const playerLine1 = document.querySelector('#player-line-1');
+    const playerLine2 = document.querySelector('#player-line-2');
+    updatePlayerLine(playerLine1, matchData.firstPlayer);
+    updatePlayerLine(playerLine2, matchData.secondPlayer);
 }
+
+function updatePlayerLine(playerLine, player) {
+    const playerNameElement = playerLine.querySelector('.player-name');
+    playerNameElement.textContent = player.playerName;
+    const playerScoreDiv = playerLine.querySelector('.player-score');
+    const scoreElements = playerScoreDiv.querySelectorAll('.score');
+    scoreElements[0].textContent = player.sets;
+    scoreElements[1].textContent = player.games;
+    scoreElements[2].textContent = player.points;
+}
+
 function disableButtons() {
     let buttonScore1 = document.querySelector('#score-button-1');
     let buttonScore2 = document.querySelector('#score-button-2');
@@ -91,9 +97,15 @@ function disableButtons() {
 }
 
 function showWinner() {
-    let scoreboard = document.querySelector('.scoreboard');
-    let winnerElem = document.createElement("div");
-    winnerElem.append("Игра завершена")
-    scoreboard.append(winnerElem);
+    const winnerBlock = document.querySelector('.winner-block');
+    winnerBlock.style.display = 'flex';
+    const winnerName = matchData.firstPlayerScore.sets === 2 ? matchData.firstPlayerName : matchData.secondPlayerName;
+    winnerBlock.textContent = "Игра завершена. " + winnerName + " победил!";
+}
+
+function showError(errorMessage) {
+    const errorBlock = document.querySelector('.error-block');
+    errorBlock.style.display = 'flex';
+    errorBlock.textContent = errorMessage;
 }
 
