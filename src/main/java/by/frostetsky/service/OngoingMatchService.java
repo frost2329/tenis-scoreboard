@@ -5,11 +5,13 @@ import by.frostetsky.exception.MatchNotFoundException;
 import by.frostetsky.mapper.MatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.dto.PlayerDto;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class OngoingMatchService {
     private static final OngoingMatchService INSTANCE = new OngoingMatchService();
     public static OngoingMatchService getInstance() {
@@ -27,6 +29,7 @@ public class OngoingMatchService {
         PlayerDto secondPlayerDto = playerService.getOrCreatePlayer(secondPlayerName);
         CurrentMatchModel currentMatchModel = new CurrentMatchModel(firstPlayerDto, secondPlayerDto);
         matches.put(currentMatchModel.getUuid(), currentMatchModel);
+        log.info("Current match was crated  {}", currentMatchModel);
         return currentMatchModel.getUuid();
     }
 
@@ -44,6 +47,8 @@ public class OngoingMatchService {
     }
 
     public void removeMatch(UUID uuid) {
+        getMatchModel(uuid);
+        log.info("Current match was removed  uuid {}", uuid);
         matches.remove(uuid);
     }
 }

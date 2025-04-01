@@ -7,9 +7,11 @@ import by.frostetsky.mapper.MatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.model.PlayerScore;
 import by.frostetsky.model.Point;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+@Slf4j
 public class MatchScoreCalculatorService {
     private static final MatchScoreCalculatorService INSTANCE = new MatchScoreCalculatorService();
     private  MatchScoreCalculatorService() {}
@@ -26,16 +28,22 @@ public class MatchScoreCalculatorService {
         if (match.isFinished()) {
             throw new GameFinishedException("Game is finished");
         }
-
-        if (match.getFirstPlayerId() == playerId) {
-            addPoint(match, match.getFirstPlayerScore(), match.getSecondPlayerScore());
-        } else if (match.getSecondPlayerId() == playerId) {
-            addPoint(match, match.getSecondPlayerScore(), match.getFirstPlayerScore());
-        } else {
-            throw new MatchScoreCalculatorServiceException("Не удалось получить счет игрока id " + playerId);
+        try {
+            if (match.getFirstPlayerId() == playerId) {
+                addPoint(match, match.getFirstPlayerScore(), match.getSecondPlayerScore());
+            } else if (match.getSecondPlayerId() == playerId) {
+                addPoint(match, match.getSecondPlayerScore(), match.getFirstPlayerScore());
+            } else {
+                throw new MatchScoreCalculatorServiceException("Не удалось получить счет игрока id " + playerId);
+            }
+        } catch (RuntimeException e) {
+            log.error("Exception occurred", e);
+            throw new MatchScoreCalculatorServiceException("Ошибка при обновлении счета матча", e);
         }
+        log.info("Match score was  {}", match);
 
         if(match.isFinished()) {
+            log.info("Game finished");
             finishedMatchService.saveMatch(match);
             ongoingMatchService.removeMatch(match.getUuid());
         }

@@ -16,8 +16,8 @@ public class MathRepositoryNewTest {
 
     @Test
     public void checkSaveAndReadMatch() {
-        Player player1 = Player.builder().name("Den").build();
-        Player player2 = Player.builder().name("Pen").build();
+        Player player1 = Player.builder().name("sdfdfsd").build();
+        Player player2 = Player.builder().name("Penfdfdf").build();
 
         playerRepository.save(player1);
         playerRepository.save(player2);
@@ -35,9 +35,7 @@ public class MathRepositoryNewTest {
         for(FinishedMatch m : matches) {
             System.out.println(m.getFirstPlayer().getName());
         }
-
-
-        assertEquals(match.getFirstPlayer().getName(), "Den");
-        assertEquals(match.getSecondPlayer().getName(), "Pen");
+        assertEquals(match.getFirstPlayer().getName(), "sdfdfsd");
+        assertEquals(match.getSecondPlayer().getName(), "Penfdfdf");
     }
 }

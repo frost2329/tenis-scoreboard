@@ -5,10 +5,11 @@ import by.frostetsky.exception.PlayerServiceException;
 import by.frostetsky.mapper.PlayerMapper;
 import by.frostetsky.entity.Player;
 import by.frostetsky.repository.PlayerRepository;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.util.Optional;
-
+@Slf4j
 public class PlayerService {
     private static final PlayerService INSTANCE = new PlayerService();
     private  PlayerService() {}
@@ -31,9 +32,11 @@ public class PlayerService {
     public Player createPlayer(String name) {
         try {
             Player player = Player.builder().name(name).build();
+            log.info("Player was crated {}", player);
             playerRepository.save(player);
             return player;
         } catch (Exception e) {
+            log.error("Exception occurred", e);
             throw new PlayerServiceException("Error creating player in service", e);
         }
 
