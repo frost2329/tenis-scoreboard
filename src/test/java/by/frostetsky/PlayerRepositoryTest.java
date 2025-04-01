@@ -17,7 +17,7 @@ public class PlayerRepositoryTest {
 
         Player player1 = Player.builder().name("Victor").build();
         Player player2 = Player.builder().name("Victor").build();
-        PlayerRepository playerRepository = new PlayerRepository(session);
+        PlayerRepository playerRepository = new PlayerRepository();
         playerRepository.save(player1);
 
 

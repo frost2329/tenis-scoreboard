@@ -2,7 +2,7 @@ package by.frostetsky.dto;
 
 import java.util.UUID;
 
-public record MatchDto (
+public record MatchDto(
         UUID uuid,
         PlayerScoreDto firstPlayer,
         PlayerScoreDto secondPlayer,

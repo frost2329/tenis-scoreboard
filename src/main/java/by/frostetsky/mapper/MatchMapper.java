@@ -6,10 +6,8 @@ import by.frostetsky.model.CurrentMatchModel;
 
 public class MatchMapper {
     private static final MatchMapper INSTANCE = new MatchMapper();
-
     private MatchMapper() {
     }
-
     public static MatchMapper getInstance() {
         return INSTANCE;
     }

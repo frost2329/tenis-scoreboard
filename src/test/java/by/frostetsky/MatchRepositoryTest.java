@@ -35,7 +35,7 @@ public class MatchRepositoryTest {
             session.save(match);
         }
 
-        MatchRepository matchRepository = new MatchRepository(session);
+        MatchRepository matchRepository = new MatchRepository();
 
         List<FinishedMatch> matches = matchRepository.findAll(2, 3, null);
         for(FinishedMatch match : matches) {
@@ -60,7 +60,7 @@ public class MatchRepositoryTest {
         session.save(player2);
         session.save(player1);
 
-        MatchRepository matchRepository = new MatchRepository(session);
+        MatchRepository matchRepository = new MatchRepository();
 
         for (int i = 0; i < matchCount; i++) {
             FinishedMatch match = FinishedMatch.builder()

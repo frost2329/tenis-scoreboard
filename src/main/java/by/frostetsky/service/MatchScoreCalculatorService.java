@@ -23,6 +23,10 @@ public class MatchScoreCalculatorService {
 
     public MatchDto updateScore (UUID uuid, Integer playerId) {
         CurrentMatchModel match = ongoingMatchService.getMatchModel(uuid);
+        if (match.isFinished()) {
+            throw new GameFinishedException("Game is finished");
+        }
+
         if (match.getFirstPlayerId() == playerId) {
             addPoint(match, match.getFirstPlayerScore(), match.getSecondPlayerScore());
         } else if (match.getSecondPlayerId() == playerId) {
@@ -30,6 +34,7 @@ public class MatchScoreCalculatorService {
         } else {
             throw new MatchScoreCalculatorServiceException("Не удалось получить счет игрока id " + playerId);
         }
+
         if(match.isFinished()) {
             finishedMatchService.saveMatch(match);
             ongoingMatchService.removeMatch(match.getUuid());
@@ -38,9 +43,6 @@ public class MatchScoreCalculatorService {
     }
 
     private void addPoint(CurrentMatchModel match, PlayerScore score, PlayerScore opponentScore) {
-        if (match.isFinished()) {
-            throw new GameFinishedException("Игра завершена, добавить очко невозможно");
-        }
         Point points = score.getPoints();
         Point opponentPoints = opponentScore.getPoints();
 

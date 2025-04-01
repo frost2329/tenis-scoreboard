@@ -1,53 +1,40 @@
 package by.frostetsky.service;
 
 import by.frostetsky.dto.PlayerDto;
-import by.frostetsky.entity.FinishedMatch;
+import by.frostetsky.exception.PlayerServiceException;
 import by.frostetsky.mapper.PlayerMapper;
-import by.frostetsky.repository.MatchRepository;
-import by.frostetsky.repository.PlayerRepository;
 import by.frostetsky.entity.Player;
-import by.frostetsky.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import by.frostetsky.repository.PlayerRepository;
+
 
 import java.util.Optional;
 
 public class PlayerService {
     private static final PlayerService INSTANCE = new PlayerService();
     private  PlayerService() {}
-    public static PlayerService getInstance() {return INSTANCE;}
-
-    private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    public static PlayerService getInstance() {
+        return INSTANCE;
+    }
     private final PlayerMapper playerMapper = PlayerMapper.getInstance();
+    private final PlayerRepository playerRepository = new PlayerRepository();
 
-    public PlayerDto getPlayer(String name) {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
+    public PlayerDto getOrCreatePlayer(String name) {
         try {
-            transaction = session.beginTransaction();
-            PlayerRepository playerRepository = new PlayerRepository(session);
-            Optional<Player> maybePlayer = playerRepository.getByName(name);
-            Player player = maybePlayer.orElse(createPlayer(name, playerRepository));
-            session.getTransaction().commit();
+            Optional<Player> maybePlayer = playerRepository.findByName(name);
+            Player player = maybePlayer.orElse(createPlayer(name));
             return playerMapper.toDto(player);
         } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при получении игрока", e);
+            throw new PlayerServiceException("Error receiving player in service", e);
         }
-
-
     }
 
-    public Player createPlayer(String name, PlayerRepository playerRepository) {
+    public Player createPlayer(String name) {
         try {
             Player player = Player.builder().name(name).build();
             playerRepository.save(player);
             return player;
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при создании игрока", e);
+            throw new PlayerServiceException("Error creating player in service", e);
         }
 
     }

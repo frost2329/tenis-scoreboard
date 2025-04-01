@@ -3,7 +3,6 @@ package by.frostetsky.service;
 import by.frostetsky.dto.MatchDto;
 import by.frostetsky.exception.MatchNotFoundException;
 import by.frostetsky.mapper.MatchMapper;
-import by.frostetsky.mapper.PlayerMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.dto.PlayerDto;
 
@@ -24,8 +23,8 @@ public class OngoingMatchService {
     private final Map<UUID, CurrentMatchModel> matches = new ConcurrentHashMap<>();
 
     public UUID createMatch(String firstPlayerName, String secondPlayerName) {
-        PlayerDto firstPlayerDto = playerService.getPlayer(firstPlayerName);
-        PlayerDto secondPlayerDto = playerService.getPlayer(secondPlayerName);
+        PlayerDto firstPlayerDto = playerService.getOrCreatePlayer(firstPlayerName);
+        PlayerDto secondPlayerDto = playerService.getOrCreatePlayer(secondPlayerName);
         CurrentMatchModel currentMatchModel = new CurrentMatchModel(firstPlayerDto, secondPlayerDto);
         matches.put(currentMatchModel.getUuid(), currentMatchModel);
         return currentMatchModel.getUuid();

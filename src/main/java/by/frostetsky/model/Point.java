@@ -13,6 +13,7 @@ public enum Point {
     Point(String value) {
         this.value = value;
     }
+
     public String getValue() {
         return value;
     }
@@ -22,17 +23,15 @@ public enum Point {
             case ZERO -> FIFTEEN;
             case FIFTEEN -> THIRTY;
             case THIRTY -> FORTY;
-            case FORTY,  ADVANTAGE-> ADVANTAGE;
+            case FORTY, ADVANTAGE -> ADVANTAGE;
         };
     }
 
     public Point prev() {
         return switch (this) {
-            case ZERO -> ZERO;
-            case FIFTEEN -> ZERO;
             case THIRTY -> FIFTEEN;
             case FORTY -> THIRTY;
-            case ADVANTAGE-> FORTY;
+            case ADVANTAGE -> FORTY;
             default -> ZERO;
         };
     }
