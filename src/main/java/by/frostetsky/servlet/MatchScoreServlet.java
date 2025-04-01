@@ -3,6 +3,7 @@ package by.frostetsky.servlet;
 import by.frostetsky.dto.MatchDto;
 import by.frostetsky.exception.MatchNotFoundException;
 import by.frostetsky.service.MatchScoreCalculatorService;
+import by.frostetsky.service.ValidatorService;
 import by.frostetsky.util.ResponseUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,15 +25,12 @@ public class MatchScoreServlet extends HttpServlet {
     private final Gson gson = GsonSingleton.getInstance();
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
     private final MatchScoreCalculatorService matchScoreCalculatorService = MatchScoreCalculatorService.getInstance();
+    private final ValidatorService validatorService = new ValidatorService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String uuid = req.getParameter("uuid");
-        if(uuid == null) {
-            log.warn("UUID is null");
-            ResponseUtil.sendResponse(resp, HttpServletResponse.SC_BAD_REQUEST, "UUID is empty");
-            return;
-        }
+        validatorService.validateUUID(uuid);
         try {
             MatchDto matchDto = ongoingMatchService.getCurrentMatch(UUID.fromString(uuid));
             log.info("Successfully got current match {}", matchDto);
@@ -51,8 +49,11 @@ public class MatchScoreServlet extends HttpServlet {
         String requestBody =  RequestUtil.readRequestBody(req);
         MatchScoreRequest matchScoreRequest = gson.fromJson(requestBody, MatchScoreRequest.class);
         log.info("POST request was received requestBody {}", matchScoreRequest);
+        validatorService.validateUUID(matchScoreRequest.uuid());
         try {
-            MatchDto matchDto = matchScoreCalculatorService.updateScore(matchScoreRequest.uuid(), matchScoreRequest.playerId());
+            MatchDto matchDto = matchScoreCalculatorService.updateScore(
+                    UUID.fromString(matchScoreRequest.uuid()),
+                    matchScoreRequest.playerId());
             log.info("Match score was updated {}", matchDto);
             ResponseUtil.sendResponse(resp, HttpServletResponse.SC_OK, matchDto);
         } catch (Exception e) {
