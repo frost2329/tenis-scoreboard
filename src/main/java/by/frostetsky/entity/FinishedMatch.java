@@ -9,6 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "matches")
 public class FinishedMatch implements BaseEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

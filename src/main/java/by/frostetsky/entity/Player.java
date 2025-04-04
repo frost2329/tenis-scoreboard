@@ -9,6 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "players")
 public class Player implements BaseEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
