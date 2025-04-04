@@ -18,7 +18,7 @@ public class ExceptionHandlerFilter extends HttpFilter {
         try {
             super.doFilter(req, resp, chain);
         } catch (Throwable e) {
-            log.error("Exception occurred", e);
+            log.error("Exception was occurred", e);
             ExceptionHandler.handle(resp, e);
         }
     }
