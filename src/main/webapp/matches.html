@@ -14,8 +14,14 @@
         <a href="/matches" class="nav-link">Matches</a>
     </nav>
 </header>
+
 <div class="container">
     <h1>Tennis Matches</h1>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by player name...">
+    </div>
+
     <div id="loading" class="loading">Loading matches...</div>
     <div id="error" class="error" style="display: none;"></div>
 
@@ -31,9 +37,7 @@
         </tbody>
     </table>
 
-    <div class="pagination-container">
-
-    </div>
+    <div class="pagination-container"></div>
 </div>
 
 </body>

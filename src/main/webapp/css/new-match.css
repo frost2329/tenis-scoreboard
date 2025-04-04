@@ -105,3 +105,13 @@ body {
 .submit-button:hover {
     background-color: #45a049;
 }
+
+
+ .error-message {
+     color: #dc3545;
+     margin-top: 5px;
+     font-size: 14px;
+ }
+.form-group {
+    margin-bottom: 15px;
+}

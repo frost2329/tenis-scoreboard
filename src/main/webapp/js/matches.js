@@ -2,11 +2,42 @@ const API_URL = '/matches-data';
 const PAGE_SIZE = 5;
 let currentPage = 1;
 let matchesData;
+let searchTimeout = null;
 
-document.addEventListener('DOMContentLoaded', loadMatchesData);
+document.addEventListener('DOMContentLoaded', () => {
+    loadMatchesData();
 
-function loadMatchesData() {
-    fetch(`${API_URL}?page=${currentPage}&size=${PAGE_SIZE}`, {method: 'GET'})
+    // Получаем элементы DOM один раз
+    const searchInput = document.getElementById('search-input');
+
+    // Обработчики событий
+    searchInput.addEventListener('input', handleSearchInput);
+    searchInput.addEventListener('keypress', handleSearchKeyPress);
+});
+
+function handleSearchInput() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        performSearch();
+    }, 1000);
+}
+
+function handleSearchKeyPress(e) {
+    if (e.key === 'Enter') {
+        clearTimeout(searchTimeout);
+        performSearch();
+    }
+}
+
+function performSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchQuery = searchInput ? (searchInput.value || '').trim() : '';
+    loadMatchesData(searchQuery);
+}
+
+function loadMatchesData(searchFilter) {
+    let url = `${API_URL}?page=${currentPage}&size=${PAGE_SIZE}&filter=${searchFilter||''}`
+    fetch(url, {method: 'GET'})
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);

@@ -13,6 +13,7 @@ public class ExceptionHandler {
     private static int getStatusCode(Throwable e) {
         return switch (e.getClass().getSimpleName()) {
             case "BadRequestException" -> HttpServletResponse.SC_BAD_REQUEST;
+            case "GameFinishedException" -> HttpServletResponse.SC_BAD_REQUEST;
             case "MatchNotFoundException" -> HttpServletResponse.SC_NOT_FOUND;
             default -> HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
         };

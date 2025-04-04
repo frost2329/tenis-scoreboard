@@ -5,6 +5,8 @@ import by.frostetsky.exception.MatchNotFoundException;
 import by.frostetsky.mapper.MatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.dto.PlayerDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -12,15 +14,14 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OngoingMatchService {
     private static final OngoingMatchService INSTANCE = new OngoingMatchService();
     public static OngoingMatchService getInstance() {
         return INSTANCE;
     }
-    private OngoingMatchService() {}
-
     private final PlayerService playerService = PlayerService.getInstance();
-    private final MatchMapper matchMapper = MatchMapper.getInstance();
+    private final MatchMapper matchMapper = new MatchMapper();
 
     private final Map<UUID, CurrentMatchModel> matches = new ConcurrentHashMap<>();
 

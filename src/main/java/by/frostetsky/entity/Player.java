@@ -4,10 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 @Builder
 @Entity
 public class Player implements BaseEntity<Integer> {

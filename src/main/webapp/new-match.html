@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Match | Tennis Scoreboard</title>
     <link rel="stylesheet" href="css/new-match.css">
+    <script src="/js/new-match.js"></script>
 </head>
 <body>
 <header class="header">
@@ -18,7 +19,7 @@
     <div class="form-container">
         <h1 class="form-title">New Match</h1>
 
-        <form class="match-form" action="/new-match" method="post">
+        <form class="match-form" id="matchForm">
             <div class="form-group">
                 <label class="form-label" for="player1">Player 1</label>
                 <input class="form-input"
@@ -38,6 +39,8 @@
                        placeholder="Enter second player name"
                        required>
             </div>
+
+            <div id="formError" class="error-message"></div>
 
             <button class="submit-button" type="submit">Start Match!</button>
         </form>

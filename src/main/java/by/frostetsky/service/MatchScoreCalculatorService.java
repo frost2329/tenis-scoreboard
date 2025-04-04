@@ -7,21 +7,29 @@ import by.frostetsky.mapper.MatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.model.PlayerScore;
 import by.frostetsky.model.Point;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchScoreCalculatorService {
+    private static final Integer START_SCORE  = 0;
+    private static final Integer GAMES_TO_WIN = 6;
+    private static final Integer SETS_TO_WIN = 2;
+    private static final Integer TIEBREAK_POINTS_TO_WIN = 7;
+    private static final Integer DIFFERENCE_ENOUGH_TO_WIN  = 2;
+
     private static final MatchScoreCalculatorService INSTANCE = new MatchScoreCalculatorService();
-    private  MatchScoreCalculatorService() {}
     public static MatchScoreCalculatorService getInstance() {
         return INSTANCE;
     }
 
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
     private final FinishedMatchService finishedMatchService = FinishedMatchService.getInstance();
-    private final MatchMapper matchMapper = MatchMapper.getInstance();
+    private final MatchMapper matchMapper = new MatchMapper();
 
     public MatchDto updateScore (UUID uuid, Integer playerId) {
         CurrentMatchModel match = ongoingMatchService.getMatchModel(uuid);
@@ -42,7 +50,7 @@ public class MatchScoreCalculatorService {
         }
         log.info("Match score was  {}", match);
 
-        if(match.isFinished()) {
+        if (match.isFinished()) {
             log.info("Game finished");
             finishedMatchService.saveMatch(match);
             ongoingMatchService.removeMatch(match.getUuid());
@@ -84,9 +92,9 @@ public class MatchScoreCalculatorService {
         int points = score.getTieBreakPoints();
         int opponentPoints = opponentScore.getTieBreakPoints();
         score.setTieBreakPoints(++points);
-        if (points >= 7 && points - 2 >= opponentPoints) {
-            score.setTieBreakPoints(0);
-            opponentScore.setTieBreakPoints(0);
+        if (points >= TIEBREAK_POINTS_TO_WIN && points - opponentPoints  >= DIFFERENCE_ENOUGH_TO_WIN) {
+            score.setTieBreakPoints(START_SCORE);
+            opponentScore.setTieBreakPoints(START_SCORE);
             addGame(match, score, opponentScore);
         }
     }
@@ -95,26 +103,26 @@ public class MatchScoreCalculatorService {
         int games = score.getGames();
         int opponentGames = opponentScore.getGames();
         score.setGames(++games);
-        if (games == 6) {
-            if (opponentGames < 5) {
-                score.setGames(0);
-                opponentScore.setGames(0);
+        if (games == GAMES_TO_WIN) {
+            if (games - opponentGames >= DIFFERENCE_ENOUGH_TO_WIN) {
+                score.setGames(START_SCORE);
+                opponentScore.setGames(START_SCORE);
                 addSet(match, score);
-            } else if (opponentGames == 6) {
+            } else if (opponentGames == GAMES_TO_WIN) {
                 match.setTieBreak(true);
             }
-        } else if (games > 6) {
+        } else if (games > GAMES_TO_WIN) {
             match.setTieBreak(false);
-            score.setGames(0);
-            opponentScore.setGames(0);
+            score.setGames(START_SCORE);
+            opponentScore.setGames(START_SCORE);
             addSet(match, score);
         }
     }
 
     private void addSet(CurrentMatchModel match, PlayerScore score) {
         score.setSets(score.getSets()+1);
-        if(score.getSets() == 2) {
-            match.setWinner(match.getFirstPlayerScore().getSets() == 2
+        if(score.getSets() == SETS_TO_WIN) {
+            match.setWinner(match.getFirstPlayerScore().getSets() == SETS_TO_WIN
                     ? match.getFirstPlayerId()
                     : match.getSecondPlayerId());
             match.setFinished(true);

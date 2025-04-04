@@ -1,9 +1,7 @@
 package by.frostetsky.model;
 
 import by.frostetsky.dto.PlayerDto;
-import by.frostetsky.exception.GameFinishedException;
 import lombok.Data;
-
 import java.util.UUID;
 
 

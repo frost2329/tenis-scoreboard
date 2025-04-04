@@ -12,10 +12,8 @@ import java.io.IOException;
 @Slf4j
 @WebServlet("/match-table")
 public class MatchTableServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("match-score.html").forward(req, resp);
     }
-
 }

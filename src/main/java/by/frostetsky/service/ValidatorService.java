@@ -1,7 +1,6 @@
 package by.frostetsky.service;
 
 import by.frostetsky.exception.BadRequestException;
-
 import java.util.UUID;
 
 public class ValidatorService {
@@ -39,5 +38,24 @@ public class ValidatorService {
         if (playerName.length() < 3) {
             throw new BadRequestException("Player %d name is too short".formatted(playerNumber));
         }
+    }
+
+    public Integer validatePageParam(String param, Integer defaultValue) {
+        if(param != null) {
+            try {
+                return Integer.parseInt(param);
+            } catch (Exception e) {
+                throw new BadRequestException("Invalid page parameter "+ param);
+            }
+        }
+        return defaultValue != null ? defaultValue : 1;
+    }
+
+    public String validateNameFilter(String filter) {
+        if (filter == null) {
+            return "";
+        }
+        int endIndex = Math.min(filter.length(), 19);
+        return filter.substring(0, endIndex).toLowerCase();
     }
 }

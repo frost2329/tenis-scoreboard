@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResponseUtil {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     public static void sendResponse(HttpServletResponse resp, int httpStatus, Object responseBody) throws IOException {
         resp.setContentType("application/json");
         resp.setStatus(httpStatus);
@@ -16,9 +16,6 @@ public class ResponseUtil {
     }
 
     public static void sendErrorResponse(HttpServletResponse resp, int httpStatus, String message) throws IOException {
-        resp.setContentType("application/json");
-        resp.setStatus(httpStatus);
-        String json = gson.toJson(new ErrorMessage(message));
-        resp.getWriter().write(json);
+        sendResponse(resp, httpStatus, new ErrorMessage(message));
     }
 }
