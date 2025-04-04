@@ -5,38 +5,33 @@ let matchesData;
 let searchTimeout = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadMatchesData();
-
-    // Получаем элементы DOM один раз
     const searchInput = document.getElementById('search-input');
-
-    // Обработчики событий
     searchInput.addEventListener('input', handleSearchInput);
     searchInput.addEventListener('keypress', handleSearchKeyPress);
+    loadMatchesData();
 });
 
 function handleSearchInput() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-        performSearch();
+        currentPage = 1;
+        loadMatchesData();
     }, 1000);
 }
 
 function handleSearchKeyPress(e) {
     if (e.key === 'Enter') {
         clearTimeout(searchTimeout);
-        performSearch();
+        currentPage = 1;
+        loadMatchesData();
     }
 }
 
-function performSearch() {
+
+function loadMatchesData() {
     const searchInput = document.getElementById('search-input');
     const searchQuery = searchInput ? (searchInput.value || '').trim() : '';
-    loadMatchesData(searchQuery);
-}
-
-function loadMatchesData(searchFilter) {
-    let url = `${API_URL}?page=${currentPage}&size=${PAGE_SIZE}&filter=${searchFilter||''}`
+    let url = `${API_URL}?page=${currentPage}&size=${PAGE_SIZE}&filter=${searchQuery||''}`
     fetch(url, {method: 'GET'})
         .then(response => {
             if (!response.ok) {

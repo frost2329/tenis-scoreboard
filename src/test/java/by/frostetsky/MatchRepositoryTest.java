@@ -60,7 +60,7 @@ public class MatchRepositoryTest {
 
             matchRepository.save(match);
         }
-        assertEquals(25, matchRepository.getTotalCount(), "Количество матчей должно быть " + matchCount);
+        assertEquals(25, matchRepository.getTotalCount(""), "Количество матчей должно быть " + matchCount);
 
     }
 }

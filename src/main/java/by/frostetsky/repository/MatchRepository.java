@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
-import java.util.Locale;
 
 @Slf4j
 public class MatchRepository {
@@ -38,10 +37,10 @@ public class MatchRepository {
         String hql = """
                 SELECT m
                 FROM FinishedMatch m
-                WHERE lower(m.firstPlayer.name) LIKE :fragment
-                OR lower(m.secondPlayer.name) LIKE :fragment
+                WHERE lower(m.firstPlayer.name) LIKE lower(:fragment)
+                OR lower(m.secondPlayer.name) LIKE lower(:fragment)
                 """;
-        String fragment = playerNameFilter != null ? playerNameFilter.toLowerCase(Locale.ROOT) + "%" : "%";
+        String fragment = playerNameFilter != null ? playerNameFilter + "%" : "%";
         try {
             log.info("Getting all finished matches by params page={}, size{}, fragment={}",page, size, fragment);
             transaction = session.beginTransaction();
@@ -61,14 +60,22 @@ public class MatchRepository {
         }
     }
 
-    public Long getTotalCount() {
+    public Long getTotalCount(String playerNameFilter) {
         Session session = sessionFactory.getCurrentSession();
+        String hql = """
+        select count(m)
+        from FinishedMatch m 
+        WHERE lower(m.firstPlayer.name) LIKE lower(:fragment)
+        OR lower(m.secondPlayer.name) LIKE lower(:fragment)
+        """;
         Transaction transaction = null;
-        String hql = "select count(m) from FinishedMatch m";
+        String fragment = playerNameFilter != null ? playerNameFilter + "%" : "%";
         try {
             log.info("Getting totalCount of finished matches");
             transaction = session.beginTransaction();
-            Long totalCount = session.createQuery(hql, Long.class).uniqueResult();
+            Long totalCount = session.createQuery(hql, Long.class)
+                    .setParameter("fragment", fragment)
+                    .uniqueResult();
             session.getTransaction().commit();
             return totalCount;
         } catch (Exception e) {

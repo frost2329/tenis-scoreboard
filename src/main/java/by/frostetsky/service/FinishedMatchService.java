@@ -46,7 +46,7 @@ public class FinishedMatchService {
             log.info("Getting all finished matches by params page={}, size{}, filter={}",page, size, filter);
             List<FinishedMatch> matches = matchRepository.findAll(page, size, filter);
             log.info("Getting totalCount of finished matches");
-            Long totalCount = matchRepository.getTotalCount();
+            Long totalCount = matchRepository.getTotalCount(filter);
             return new FinishedMatchesResponse(
                     matches.stream()
                             .map(finishedMatchMapper::toDto)
