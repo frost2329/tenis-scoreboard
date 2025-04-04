@@ -6,9 +6,11 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+@Slf4j
 @WebFilter("/*")
 public class ExceptionHandlerFilter extends HttpFilter {
     @Override
@@ -16,6 +18,7 @@ public class ExceptionHandlerFilter extends HttpFilter {
         try {
             super.doFilter(req, resp, chain);
         } catch (Throwable e) {
+            log.error("Exception occurred", e);
             ExceptionHandler.handle(resp, e);
         }
     }
