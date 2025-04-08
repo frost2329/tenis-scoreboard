@@ -7,20 +7,14 @@ import by.frostetsky.entity.FinishedMatch;
 import by.frostetsky.mapper.FinishedMatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.repository.PlayerRepository;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
 import java.util.List;
 
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FinishedMatchService {
-    private static final FinishedMatchService INSTANCE = new FinishedMatchService();
-    public static FinishedMatchService getInstance() {
-        return INSTANCE;
-    }
+
     private final PlayerRepository playerRepository = new PlayerRepository();
     private final MatchRepository matchRepository = new MatchRepository();
     private final FinishedMatchMapper finishedMatchMapper = new FinishedMatchMapper();

@@ -1,10 +1,10 @@
-package by.frostetsky.service;
+package by.frostetsky.util;
 
 import by.frostetsky.exception.BadRequestException;
 import java.util.UUID;
 
-public class ValidatorService {
-    public void validateUUID(String uuid) {
+public class ValidateUtil {
+    public static void validateUUID(String uuid) {
         if (uuid == null) {
             throw new BadRequestException("UUID is empty");
         }
@@ -15,7 +15,7 @@ public class ValidatorService {
         }
     }
 
-    public void validatePlayerNames(String playerName1, String playerName2) {
+    public static void validatePlayerNames(String playerName1, String playerName2) {
         validatePlayerName(playerName1, 1);
         validatePlayerName(playerName2, 2);
 
@@ -24,7 +24,7 @@ public class ValidatorService {
         }
     }
 
-    public void validatePlayerName(String playerName, int playerNumber) {
+    public static void validatePlayerName(String playerName, int playerNumber) {
         if (playerName == null || playerName.isEmpty()) {
             throw new BadRequestException("Player %d is empty".formatted(playerNumber));
         }
@@ -40,7 +40,7 @@ public class ValidatorService {
         }
     }
 
-    public Integer validatePageParam(String param, Integer defaultValue) {
+    public static Integer validatePageParam(String param, Integer defaultValue) {
         if(param != null) {
             try {
                 return Integer.parseInt(param);
@@ -51,7 +51,7 @@ public class ValidatorService {
         return defaultValue != null ? defaultValue : 1;
     }
 
-    public String validateNameFilter(String filter) {
+    public static String validateNameFilter(String filter) {
         if (filter == null) {
             return "";
         }

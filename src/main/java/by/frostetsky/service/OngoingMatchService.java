@@ -20,9 +20,9 @@ public class OngoingMatchService {
     public static OngoingMatchService getInstance() {
         return INSTANCE;
     }
-    private final PlayerService playerService = PlayerService.getInstance();
-    private final MatchMapper matchMapper = new MatchMapper();
 
+    private final PlayerService playerService = new PlayerService();
+    private final MatchMapper matchMapper = new MatchMapper();
     private final Map<UUID, CurrentMatchModel> matches = new ConcurrentHashMap<>();
 
     public UUID createMatch(String firstPlayerName, String secondPlayerName) {

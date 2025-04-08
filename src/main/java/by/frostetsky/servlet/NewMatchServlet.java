@@ -1,6 +1,6 @@
 package by.frostetsky.servlet;
 
-import by.frostetsky.service.ValidatorService;
+import by.frostetsky.util.ValidateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +17,6 @@ import java.util.UUID;
 public class NewMatchServlet extends HttpServlet {
 
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
-    private final ValidatorService validatorService = new ValidatorService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,7 +28,7 @@ public class NewMatchServlet extends HttpServlet {
         String playerName1 = req.getParameter("playerName1");
         String playerName2 = req.getParameter("playerName2");
         log.info("POST request was received params playerName1 {}, playerName2 {}", playerName1, playerName2);
-        validatorService.validatePlayerNames(playerName1, playerName2);
+        ValidateUtil.validatePlayerNames(playerName1, playerName2);
         UUID uuid = ongoingMatchService.createMatch(playerName1, playerName2);
         log.info("Current match successfully was created UUID {}", uuid );
         resp.sendRedirect("/match-table?uuid=" + uuid);

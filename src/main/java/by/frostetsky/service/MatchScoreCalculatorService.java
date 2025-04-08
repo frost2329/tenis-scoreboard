@@ -7,28 +7,21 @@ import by.frostetsky.mapper.MatchMapper;
 import by.frostetsky.model.CurrentMatchModel;
 import by.frostetsky.model.PlayerScore;
 import by.frostetsky.model.Point;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchScoreCalculatorService {
+
     private static final Integer START_SCORE  = 0;
     private static final Integer GAMES_TO_WIN = 6;
     private static final Integer SETS_TO_WIN = 2;
     private static final Integer TIEBREAK_POINTS_TO_WIN = 7;
     private static final Integer DIFFERENCE_ENOUGH_TO_WIN  = 2;
 
-    private static final MatchScoreCalculatorService INSTANCE = new MatchScoreCalculatorService();
-    public static MatchScoreCalculatorService getInstance() {
-        return INSTANCE;
-    }
-
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
-    private final FinishedMatchService finishedMatchService = FinishedMatchService.getInstance();
+    private final FinishedMatchService finishedMatchService = new FinishedMatchService();
     private final MatchMapper matchMapper = new MatchMapper();
 
     public MatchDto updateScore (UUID uuid, Integer playerId) {

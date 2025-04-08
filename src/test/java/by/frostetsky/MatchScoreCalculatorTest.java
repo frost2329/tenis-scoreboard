@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchScoreCalculatorTest {
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
-    private final MatchScoreCalculatorService matchScoreCalculatorService = MatchScoreCalculatorService.getInstance();
+    private final MatchScoreCalculatorService matchScoreCalculatorService = new MatchScoreCalculatorService();
 
 
     @Test

@@ -2,7 +2,7 @@ package by.frostetsky.servlet;
 
 import by.frostetsky.dto.MatchDto;
 import by.frostetsky.service.MatchScoreCalculatorService;
-import by.frostetsky.service.ValidatorService;
+import by.frostetsky.util.ValidateUtil;
 import by.frostetsky.util.ResponseUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import by.frostetsky.dto.MatchScoreRequest;
 import by.frostetsky.service.OngoingMatchService;
-import by.frostetsky.util.GsonSingleton;
 import by.frostetsky.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,15 +20,14 @@ import java.util.UUID;
 @Slf4j
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
-    private final Gson gson = GsonSingleton.getInstance();
+    private final Gson gson = new Gson();
     private final OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
-    private final MatchScoreCalculatorService matchScoreCalculatorService = MatchScoreCalculatorService.getInstance();
-    private final ValidatorService validatorService = new ValidatorService();
+    private final MatchScoreCalculatorService matchScoreCalculatorService = new MatchScoreCalculatorService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String uuid = req.getParameter("uuid");
-        validatorService.validateUUID(uuid);
+        ValidateUtil.validateUUID(uuid);
         MatchDto matchDto = ongoingMatchService.getCurrentMatch(UUID.fromString(uuid));
         log.info("Successfully got current match {}", matchDto);
         ResponseUtil.sendResponse(resp, HttpServletResponse.SC_OK, matchDto);
@@ -40,7 +38,7 @@ public class MatchScoreServlet extends HttpServlet {
         String requestBody =  RequestUtil.readRequestBody(req);
         MatchScoreRequest matchScoreRequest = gson.fromJson(requestBody, MatchScoreRequest.class);
         log.info("POST request was received requestBody {}", matchScoreRequest);
-        validatorService.validateUUID(matchScoreRequest.uuid());
+        ValidateUtil.validateUUID(matchScoreRequest.uuid());
         MatchDto matchDto = matchScoreCalculatorService.updateScore(
                 UUID.fromString(matchScoreRequest.uuid()),
                 matchScoreRequest.playerId());
